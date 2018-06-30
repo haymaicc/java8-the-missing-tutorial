@@ -1,24 +1,11 @@
-Default and Static Methods for Interfaces
+给接口提供默认的静态方法
 --------
 
-We all understand that we should code to interfaces. Interfaces give the client
-a contract which they should use without relying on implementation details (i.e.
-classes). Hence, promoting **[loose coupling](https://en.wikipedia.org/wiki/Loose_coupling)**.
-Designing clean interfaces is one of the most important aspect of API design.
-One of the SOLID principle **[Interface segregation](https://en.wikipedia.org/wiki/Interface_segregation_principle)**
-talks about designing smaller client-specific interfaces, instead of designing
-one general purpose interface. Interface design is the key to clean and
-effective APIs for your libraries and applications.
+我们都知道应该面向接口编程，接口给客户端一个方法定义而不需要提供实现的细节（例：实现类），于是使我们的程序变得更加松耦合。设计一个简洁的接口是API设计最重要的方面之一。SOLID(面向对象设计)原则，其中一项接口隔离就是说要设计一个小而独立的接口，而不是定义一个粗而通用的接口。接口设计是为你的应用开发高效整洁的API的关键因素。
 
-> Code for this section is inside [ch01 package](https://github.com/shekhargulati/java8-the-missing-tutorial/tree/master/code/src/main/java/com/shekhargulati/java8_tutorial/ch01).
+> 本节的代码在这里 [ch01 package](https://github.com/shekhargulati/java8-the-missing-tutorial/tree/master/code/src/main/java/com/shekhargulati/java8_tutorial/ch01).
 
-If you have designed any API then with time you would have felt the need to add
-new methods to the API. Once an API is published, it becomes difficult to add
-methods to an interface without breaking existing implementations. To make this
-point clear, suppose you are building a simple `Calculator` API that supports
-`add`,`subtract`, `divide`, and `multiply` operations. We can write a
-`Calculator` interface, as shown below. ***To keep things simple we will use
-`int`.***
+如果你定义了定义了一个API，那么随着时间的推移，你可能需要添加API的新方法。一旦发布API，就很难添加方法到接口而不破坏现有的实现。举个例子，假设你正在开发一个简单的计算器支持加，减，除，乘操作。我们可以写一个`Calculator`API，如下图所示。 ***为了简单起见，我们将使用int。***
 
 ```java
 public interface Calculator {
@@ -33,8 +20,7 @@ public interface Calculator {
 }
 ```
 
-To back this `Calculator` interface, you created a `BasicCalculator`
-implementation, as shown below.
+为了支持`Calculator`接口，你创建了一个`BasicCalculator`实现类，代码如下：
 
 ```java
 public class BasicCalculator implements Calculator {
@@ -64,11 +50,9 @@ public class BasicCalculator implements Calculator {
 }
 ```
 
-## Static Factory Methods
+## 静态工厂方法
 
-Suppose the Calculator API turned out to be very useful and easy to use. Users
-just have to create an instance of `BasicCalculator`, and then they can use the
-API. You start seeing code like that shown below.
+假设`Calculator` API原来是非常有用且易于使用的。用户只需创建一个`BasicCalculator`的实例，然后他们就可以使用了。你开始看到如下所示的代码。
 
 ```java
 Calculator calculator = new BasicCalculator();
@@ -78,15 +62,9 @@ BasicCalculator cal = new BasicCalculator();
 int difference = cal.subtract(3, 2);
 ```
 
-Oh no! Users of the API are not coding to `Calculator` interface -- instead,
-they are coding to its implementation. Your API didn't enforce users to code to
-interfaces, as the `BasicCalculator` class was public. If you make
-`BasicCalculator` package protected, then you would have to provide a static
-factory class that will take care of providing the `Calculator` implementation.
-Let's improve the code to handle this.
+不幸的是，用户正在对实现类进行编码而不是面向接口编程。你的API没有强制用户必须面向接口编程，因为`BasicCalculator`的申明是public 的，如果你让`BasicCalculator`变成受包保护，那么你不得不提供一个工厂类来负责实现`Calculator` 的实例化，接下来让我们改进代码来解决上述的问题：
 
-First, we will make `BasicCalculator` package protected so that users can't
-access the class directly.
+首先，我们将`BasicCalculator`  变成包私有，以便用户不能直接访问改类。
 
 ```java
 class BasicCalculator implements Calculator {
@@ -94,8 +72,7 @@ class BasicCalculator implements Calculator {
 }
 ```
 
-Next, we will write a factory class that will give us the `Calculator` instance,
-as shown below.
+接下来我们编写一个工厂类来提供`Calculator` 的实例化，代码如下。
 
 ```java
 public abstract class CalculatorFactory {
@@ -106,26 +83,13 @@ public abstract class CalculatorFactory {
 }
 ```
 
-Now, users will be forced to code to the `Calculator` interface, and they will
-not have access to implementation details.
+现在用户将被强制面向我们的`Calculator` 编程，而且我们不透露任何实现细节。
 
-Although we have achieved our goal, we have increased the surface area of our
-API by adding the new class `CalculatorFactory`. Now users of the API have to
-learn about one more class before they can use the API effectively. This was the
-only solution available before Java 8.
+虽然我们已经实现了我们的目标，但我们不得不增加我们的复杂性，通过新建`CalculatorFactory`类。现在我们API的用户需要了解更多的类才能高效的使用我们的API。这是Java 8 之前的解决方案。
 
-**Java 8 allows you to declare static methods inside an interface**. This allows
-API designers to define static utility methods like `getInstance` in the
-interface itself, hence keeping the API short and lean. The static methods
-inside an interface could be used to replace static helper classes
-(`CalculatorFactory`) that we normally create to define helper methods
-associated with a type. For example, the `Collections` class is a helper class
-that defines various helper methods to work with Collection and its associated
-interfaces. The methods defined in the `Collections` class could easily be added
-to `Collection` or any of its child interfaces.
+**Java 8  允许我们在接口中申明静态方法。**这允许我们API设计者在接口本身定义一个静态的工具方法，例如`getInstance` 。因此保持了接口的高效整洁。一个接口内的静态方法可以用来替换静态帮助类（`CalculatorFactory`），我们通常创建它来定义相关的帮助方法。例如，`Collections`类是一个帮助类，它定义了各种帮助方法来处理Collection及其关联的方法接口。 `Collections`类中定义的方法可以很容易地添加`Collection` 或其任何子接口
 
-The above code can be improved in Java 8 by adding a static `getInstance` method
-in the `Calculator` interface itself.
+通过Java 8 我们可以将上面的代码改造为：
 
 ```java
 public interface Calculator {
@@ -145,13 +109,9 @@ public interface Calculator {
 }
 ```
 
-## Evolving API with time
+## 不断拓展的API
 
-Some of the consumers decided to either extend the `Calculator` API by adding
-methods like `remainder`, or write their own implementation of the `Calculator`
-interface. After talking to your users you came to know that most of them would
-like to have a `remainder` method added to the `Calculator` interface. It looked
-a very simple API change, so you added one more method to the API.
+ 一些接口使用者决定通过添加方法来扩展`Calculator` API 例如`remainder`方法，或编写他们自己的`Calculator` 的实现 接口。在与您的用户交谈之后，您了解到他们中的大多数人都愿意 喜欢将一个`remainder`方法添加到`Calculator` 接口。它看起来 一个非常简单的API更改，因此您向API添加了一个的方法。 
 
 ```java
 public interface Calculator {
@@ -172,22 +132,7 @@ public interface Calculator {
 }
 ```
 
-Adding a method to an interface broke the source compatibility of the API. This
-means users who were implementing `Calculator` interface would have to add
-implementation for the `remainder` method, otherwise their code would not
-compile. This is a big problem for API designers, as it makes APIs difficult to
-evolve. Prior to Java 8, it was not possible to have method implementations
-inside interfaces. This often became a problem when it was required to extend an
-API, i.e. adding one or more methods to the interface definition.
-
-To allow API's to evolve with time, Java 8 allows users to provide default
-implementations to methods defined in the interface. These are called
-**default**, or **defender** methods. The class implementing the interface is not
-required to provide an implementation of these methods. If an implementing class
-provides the implementation, then the implementing class method implementation
-will be used -- otherwise the default implementation will be used. The `List`
-interface has a few default methods defined, like `replaceAll`, `sort`, and
-`splitIterator`.
+向接口添加方法破坏了API兼容性。这个意味着正在使用`Calculator` 接口的用户将不得不添加`remainder` 方法的实现，否则他们的代码无法成功编译。对于API设计人员来说，这是一个很大的问题，因为它使API变得难以拓展。在Java 8之前，接口内部不能有方法实现。当API需要扩展一个方法时，这往往让人头疼。。为了支持API随着时间的推移而拓展，Java 8允许用户在接口中提供默认实现的方法。这些被称为默认或防御方法。实现接口的类不是需要提供这些方法的实现。如果一个实施类提供了实现，然后是实现类的方法实现将被使用 - 否则将使用默认实现。`List`接口定义了几个默认方法，如`replaceAll`，`sort`和`splitIterator`。
 
 ```java
 default void replaceAll(UnaryOperator<E> operator) {
@@ -199,9 +144,9 @@ default void replaceAll(UnaryOperator<E> operator) {
 }
 ```
 
-We can solve our API problem by defining a default method, as shown below.
-Default methods are usually defined using already existing methods --
-`remainder` is defined using the `subtract`, `multiply`, and `divide` methods.
+我们可以通过定义一个默认方法来解决我们的API问题，如下所示。默认方法可以用已经存在的方法来定义  --
+
+`remainder` 使用`subtract`，`multiply`和`divide` 方法来定义。
 
 ```java
 default int remainder(int number, int divisor) {
@@ -209,7 +154,7 @@ default int remainder(int number, int divisor) {
 }
 ```
 
-## Multiple inheritance
+## 多重继承
 
 A class can extend a single class, but can implement multiple interfaces. Now
 that it is feasible to have method implementation in interfaces, Java has
