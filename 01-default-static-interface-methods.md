@@ -156,13 +156,9 @@ default int remainder(int number, int divisor) {
 
 ## 多重继承
 
-A class can extend a single class, but can implement multiple interfaces. Now
-that it is feasible to have method implementation in interfaces, Java has
-multiple inheritance of behavior. Java already had multiple inheritance at the
-type level, but now it also has multiple inheritance at the behavior level.
-There are three resolution rules that help decide which method will be picked:
+一个类只能继承一个父类，但能实现多个接口。现在在Java中有接口的方法实现多重行为继承是可行的。 Java已经有了类型级别的多重继承，但现在它在行为级别上也有多重继承。有三个解决规则可以帮助决定选择哪种方法：
 
-**Rule 1: Methods declared in classes win over methods defined in interfaces.**
+**Rule 1: 在类中声明的方法胜过在接口中定义的方法**
 
 ```java
 interface A {
@@ -186,7 +182,7 @@ class App implements A{
 This will print `inside App`, as methods declared in the implementing class have
 precedence over methods declared in interfaces.
 
-**Rule 2: Otherwise, the most specific interface is selected**
+**Rule 2:否则，选择最具体的接口**
 
 ```java
 interface A {
@@ -208,10 +204,9 @@ class App implements C, B, A {
 }
 ```
 
-This will print `inside C`.
+结果是 `inside C`.
 
-**Rule 3: Otherwise, the class has to call the desired implementation
-unambiguously**
+**Rule 3: 否则，该类必须明确地调用所需的实现**
 
 ```java
 interface A {
@@ -236,6 +231,6 @@ class App implements B, A {
     }
 }
 ```
-This will print `inside B`.
+结果是 `inside B`.
 
 [![Analytics](https://ga-beacon.appspot.com/UA-59411913-3/shekhargulati/java8-the-missing-tutorial/01-default-static-interface-methods)](https://github.com/igrigorik/ga-beacon)

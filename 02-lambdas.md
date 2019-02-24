@@ -1,105 +1,64 @@
 Lambdas
 -----
 
-One of the most important features in Java 8 is the introduction of Lambda
-expressions. They make your code concise and allow you to pass behavior around.
-For some time now, Java has been criticized for being verbose and for lacking
-functional programming capabilities. With functional programming becoming more
-popular and relevant, Java is forced to embrace the functional style of
-programming. Otherwise, Java would become irrelevant.
+Java 8中最重要的功能之一就是引入Lambda表达式。它们使您的代码简洁，并允许您传递行为。一段时间以来，Java一直因为冗长，缺乏面向函数编程而受到批评。面向函数编程越来越流行，Java被迫拥抱面向函数编程。否则，Java将失去竞争力。
 
-Java 8 is a big step forward in making the world's most popular language adopt
-the functional style of programming. To support a functional programming style,
-the language must support functions as first class citizens. Prior to Java 8,
-writing a clean functional style code was not possible without the use of an
-anonymous inner class boilerplate. With the introduction of Lambda expressions,
-functions have become first class citizens and they can be passed around just
-like any other variable.
+Java 8是世界上最流行的语言采用面向函数编程向前迈出的一大步。为了支持函数式编程风格，该语言必须支持作为变量的方法。在Java 8之前，如果不使用匿名内部类，则无法编写干净的函数式代码。随着Lambda表达式的引进，函数已经成为变量，它们可以像任何其他变量一样被传递。
 
-Lambda expressions allow you to define an anonymous function that is not bound
-to an identifier. You can use them like any other construct in your programming
-language, like variable declaration. Lambda expressions are required if a
-programming language needs to support higher order functions. Higher order
-functions are functions that either accept other functions as arguments or
-returns a function as a result.
+Lambda表达式允许您定义一个未绑定到标识符的匿名函数。您可以像编程语言中的任何其他构造方式一样使用它们，如变量声明。如果编程语言需要支持更高阶的函数，则需要Lambda表达式。高阶函数是接受其他函数作为参数或作为结果返回函数的函数。
 
-> Code for this section is inside [ch02 package](https://github.com/shekhargulati/java8-the-missing-tutorial/tree/master/code/src/main/java/com/shekhargulati/java8_tutorial/ch02).
+> 本章代码 [ch02 package](https://github.com/shekhargulati/java8-the-missing-tutorial/tree/master/code/src/main/java/com/shekhargulati/java8_tutorial/ch02).
 
-Now, with the introduction of Lambda expressions in Java 8, Java supports higher
-order functions. Let us look at the  canonical example of Lambda expression -- a
-sort function in Java's `Collections` class. The `sort` function has two
-variants -- one that takes a `List` and another that takes a `List` and a
-`Comparator`. The second `sort` function is an example of a Higher order
-function that accepts a lambda expression as shown below in the code snippet.
+现在，随着Java 8中Lambda表达式的引入，Java支持更高阶的函数。让我们看看Lambda表达式的规范示例 -  Java的`Collections`类中的`sort`函数。 `sort`函数有两个变量 - 一个接受`List`，另一个接受`List`和一个`Comparator`。第二个排序函数是一个高阶函数的例子，它接受一个lambda表达式，如下面的代码片段所示。
 
 ```java
 List<String> names = Arrays.asList("shekhar", "rahul", "sameer");
 Collections.sort(names, (first, second) -> first.length() - second.length());
 ```
 
-The code shown above sorts the `names` by their length. The output of the
-program will be as shown below.
+上面显示的代码按名称的长度对名称进行排序。程序的输出如下所示。
 
 ```
 [rahul, sameer, shekhar]
 ```
 
-The expression `(first, second) -> first.length() - second.length()` shown above
-in the code snippet is a lambda expression of type `Comparator<String>`.
+代码片段中的表达式： `(first, second) -> first.length() - second.length()`  
 
-* The `(first, second)` are parameters of the `compare` method of `Comparator`.
-* `first.length() - second.length()` is the function body that compares the
-length of two names.
-* `->` is the lambda operator that separates parameters from the body of the
-lambda.
+是一个`Comparator<String>` 的lambda表达式。
 
-Before we dig deeper into Java 8 Lambdas support, let's look into their history
-to understand why they exist.
+*  `(first, second)`是 `Comparator ` 中 `compare`方法的参数
+* `first.length() - second.length()` 是方法体
+* `->` 是lambda的操作符。
 
-## History of Lambdas
+在我们深入研究Java 8 Lambdas之前，让我们看一下他们的历史，以了解它们存在的原因。
 
-Lambda expressions have their roots in the Lambda Calculus. [Lambda
-calculus](https://en.wikipedia.org/wiki/Lambda_calculus) originated from the
-work of [Alonzo Church](https://en.wikipedia.org/wiki/Alonzo_Church) on
-formalizing the concept of expressing computation with functions. Lambda
-calculus is a Turing complete, mathematically formal way to express
-computations. Turing complete means you can express any mathematical computation
-via lambdas.
+## Lambdas的历史
 
-Lambda calculus became the basis for a strong, theoretical foundation of
-functional programming languages. Many popular functional programming languages
-like Haskell and Lisp are based on Lambda calculus. The idea of higher order
-functions, i.e. a function accepting other functions, came from Lambda calculus.
+Lambda表达式基于数学中的[lambda演算](https://en.wikipedia.org/wiki/Lambda_calculus)得名，
+lambda演算起源于Alonzo Church on的工作将用函数表示正式化的计算概念。lambda演算是图灵完备的，数学形式的表达方法
+计算。图灵完备意味着你可以表达任何数学计算通过lambdas。
 
-The main concept in Lambda calculus is the expression. An expression can be
-expressed as:
+lambda演算成为了一个强大的基础，理论基础的函数式编程语言。许多流行的函数式编程语言
+像Haskell和Lisp都是基于Lambda演算的。更高阶的概念函数，即接受其他函数的函数，来自于lambda演算。
+
+lambda演算的主要概念是表达式。表达式可以是表示为:
 
 ```
 <expression> := <variable> | <function>| <application>
 ```
 
-* **variable** -- A variable is a placeholder like x, y, z for values like 1, 2,
-etc, or lambda functions.
-* **function** -- It is an anonymous function definition that takes one variable
-and produces another lambda expression. For example, `λx.x*x` is a function to
-compute square of a number.
-* **application** -- This is the act of applying a function to an argument.
-Suppose you want a square of 10, so in lambda calculus you will write a square
-function `λx.x*x` and apply it to 10. This function application  would result in
-`(λx.x*x) 10 = 10*10 = 100`.You can not only apply simple values like 10 but,
-you can apply a function to another function to produce another function. For
-example, `(λx.x*x) (λz.z+10)` will produce a function `λz.(z+10)*(z+10)`. Now,
-you can use this function to produce number plus 10 squares. This is an example
-of higher order function.
+* **variable)** -- 变量名可能是一个字符或字符串，它表示一个参数（形参）或者一个值（实参）。
+e.g. z var
+* **function)** -- 它是一个匿名函数定义，只接受一个变量生成另一个表达式. 例如, `λx.x*x` 就是计算x的平方.
+* **application** -- 这是将函数应用于参数的行为.例如你想计算10的平法，所以在lambda演算，你将写一个计算平方
+的方法，`λx.x*x` 接着带入 10。你不仅可以应用像10这样简单的值，你可以把一个函数应用到另一个函数来产生另一个函数。
+例如`(λx.x*x) (λz.z+10)`，你就能计算一个数字加10后的平方了。
 
-Now, you understand Lambda calculus and its impact on functional programming
-languages. Let's learn how it is implemented in Java 8.
+现在,你了解λ演算及其对函数式编程的影响语言。让我们了解一下它是如何在Java 8中实现的。
 
-## Passing behavior before Java 8
+## 在Java 8之前传递行为
 
-Before Java 8, the only way to pass behavior was to use anonymous classes.
-Suppose you want to send an email in another thread after user registration.
-Before Java 8, you would write code like one shown below.
+在Java 8之前，传递行为的唯一方法是使用匿名类。假设您希望在用户注册后在另一个线程中发送电子邮件。在Java 8之前，您将编写如下所示的代码:
 
 ```java
 sendEmail(new Runnable() {
@@ -110,18 +69,13 @@ sendEmail(new Runnable() {
         });
 ```
 
-Where the `sendEmail` method has following method signature.
+ `sendEmail` 将被声明成这样.
 
 ```java
 public static void sendEmail(Runnable runnable)
 ```
 
-The problem with the above mentioned code is not only that we have to
-encapsulate our action, i.e. `run` method in an object, but, the bigger problem
-is that it misses the programmer's intent, i.e. to pass behavior to the
-`sendEmail` function. If you have used libraries like Guava, you would have
-certainly felt the pain of writing anonymous classes. A simple example of
-filtering all the tasks with **lambda** in their title is shown below.
+上述代码的问题不仅在于我们必须封装我们的操作，即在对象中运行方法，而且更大的问题是它错过了程序员的意图，即将行为传递给`sendEmail`函数。如果您使用像Guava这样的库，那么您肯定会感受到编写匿名类的痛苦。下面显示了一个简单的例子，用标题中的**lambda**来过滤所有任务。
 
 ```java
 Iterable<Task> lambdaTasks = Iterables.filter(tasks, new Predicate<Task>() {
@@ -132,54 +86,34 @@ Iterable<Task> lambdaTasks = Iterables.filter(tasks, new Predicate<Task>() {
 });
 ```
 
-With Java 8 Stream API, you can write the above mentioned code without the use
-of a third party library like Guava. We will cover streams in [chapter
-3](./03-streams.md). So, stay tuned!
+使用Java 8 Stream API，您可以编写上述代码，而无需使用像Guava这样的第三方库。我们将在[chapter3](./ 03-streams.md)中介绍流。所以，请继续关注！
 
-## Java 8 Lambda expressions
+## Java 8 Lambda 表达式
 
-In Java 8, we would write the code using a lambda expression as shown below. We
-have mentioned the same example in the code snippet above.
+在Java 8中，我们将使用lambda表达式编写代码，如下所示。我们在上面的代码片段中提到了相同的示例。
 
 ```java
 sendEmail(() -> System.out.println("Sending email..."));
 ```
 
-The code shown above is concise and does not pollute the programmer's intent to
-pass behavior. `()` is used to represent that the lambda has no function
-parameters, i.e. `Runnable` interface `run` method does not have any parameters.
-`->` is the lambda operator that separates the parameters from the function body
-which prints `Sending email...` to the standard output.
+上面显示的代码简洁明了，不会污染程序员通过行为的意图。 （）用于表示lambda没有函数参数，即Runnable接口run方法没有任何参数.->是lambda操作符，用于将参数与函数体分开，打印发送电子邮件...到标准输出。
 
-Let's look at the Collections.sort example again so that we can understand how
-lambda expressions work with the parameters. To sort a list of names by their
-length, we passed a `Comparator` to the sort function. The `Comparator` is shown
-below.
+让我们看看再看一下Collections.sort示例，以便我们可以理解howlambda表达式如何使用参数。为了按名称列出名称列表，我们将`Comparator`传递给sort函数。`Comparator`如下所示。
 
 ```java
 Comparator<String> comparator = (first, second) -> first.length() - second.length();
 ```
 
-The lambda expression that we wrote was corresponding to the `compare` method in
-the Comparator interface. The signature of the `compare` function is shown
-below.
+我们写的lambda表达式对应于Comparator接口中的`compare`方法。`compare`函数的签名如下所示。
 
 ```java
 int compare(T o1, T o2);
 ```
 
-`T` is the type parameter passed to `Comparator` interface. In this case it will
-be a `String` as we are working over a List of `String`s, i.e. names.
-
-In the lambda expression, we didn't have to explicitly provide the type --
-String. The `javac` compiler inferred the type information from its context. The
-Java compiler inferred that both parameters should be String, as we are sorting
-a List of String, and the `compare` method specifies only one type, `T`. The act
-of inferring the type from the context in this way is called **Type Inference**.
-Java 8 improves the already existing type inference system in Java and makes it
-more robust and powerful to support lambda expressions. `javac` under the hood
-looks for the information close to your lambda expression and uses that
-information to find the correct type for the parameters.
+在lambda表达式中，我们不需要显式地提供类型——String。“javac”编译器从上下文推断类型信息。
+Java编译器推断，在排序时，两个参数都应该是字符串字符串列表，' compare '方法只指定一种类型' T '。该法案
+以这种方式从上下文中推断类型的方法称为**类型推断**。Java 8改进了Java中已经存在的类型推断系统，并使之成为可能
+更健壮和强大的支持lambda表达式。“javac”查找接近lambda表达式的信息并使用它查找参数的正确类型的信息。
 
 > In most cases, `javac` will infer the type from the context. In case it can't
 > resolve type because of missing or incomplete context information then the
